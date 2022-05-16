@@ -5,6 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "logging": { "engineLogging": true },
       "name": "g++ - Build and debug active file",
       "type": "cppdbg",
       "request": "launch",
@@ -15,7 +16,8 @@
       "environment": [
         {
           "name": "LD_LIBRARY_PATH",
-          "value": "${LD_LIBRARY_PATH}:~/dev/glfw-3.3.7/install/lib"
+          // quite ugly but gdb does not get ~
+          "value": "${LD_LIBRARY_PATH}:../glfw-3.3.7/install/lib"
         }
       ],
       "externalConsole": false,
@@ -25,7 +27,15 @@
           "description": "Enable pretty-printing for gdb",
           "text": "-enable-pretty-printing",
           "ignoreFailures": true
-        }
+        },
+        // Not needed: it was only the '~' that was not correctly interpreted in LD_LIBRARY_PATH
+        // on environment section
+        // it seems that gdb does not interpret it
+        // {
+        //   "description": "Additional libs for gdb",
+        //   "text": "set environment LD_LIBRARY_PATH={$LD_LIBRARY_PATH}:~/dev/glfw-3.3.7/install/lib",
+        //   "ignoreFailures": false
+        // }
       ],
       "preLaunchTask": "C/C++: g++ build active file",
       "miDebuggerPath": "/usr/bin/gdb"
