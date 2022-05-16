@@ -37,6 +37,12 @@ int main() {
       return -1;
   }
 
+  // First two parametres set the location of the lower left corner
+  // of the window.
+  // Note2: viewport could be smaller than window, so we could render
+  // things outside the viewport
+  // OpenGL use the view port to translate it's 2D coordinates
+  // to coordinate on the window. eg (-0.5, 0.5) => (200, 450)
   glViewport(0, 0, 800, 600);
 
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); 
