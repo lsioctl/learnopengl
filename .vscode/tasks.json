@@ -7,6 +7,7 @@
       "args": [
         "-fdiagnostics-color=always",
         "-g",
+        "${fileDirname}/thirdparties/glad.c",
         "${file}",
         "-I",
         "~/dev/glfw-3.3.7/install/include",
