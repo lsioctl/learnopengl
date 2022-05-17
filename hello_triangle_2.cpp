@@ -74,10 +74,18 @@ int main() {
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback); 
 
   // vertices in normalized device coordinates (visible region of OpenGL)
-  float triangle1_vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-     0.0f,  0.5f, 0.0f
+  // EBO case: we do not duplicate the same point in memory but use indices
+  // without it, for 2 triangles, we should have 6 vertices.
+  float rectangle_vertices[] = {
+     0.5f,  0.5f, 0.0f,  // top right
+     0.5f, -0.5f, 0.0f,  // bottom right
+    -0.5f, -0.5f, 0.0f,  // bottom left
+    -0.5f,  0.5f, 0.0f   // top left 
+  };
+
+  unsigned int rectangle_vertices_indices[] = {  // note that we start from 0!
+    0, 1, 3,   // first triangle
+    1, 2, 3    // second triangle
   };
 
   // Vertex Array Object
@@ -104,7 +112,14 @@ int main() {
   // (so a memory region where read is fast could be good)
   // another example is GL_DYNAMIC_DRAW, which means thata data can change a lot
   // so it should be stored in a memory region where write (and read for usage) is fast
-  glBufferData(GL_ARRAY_BUFFER, sizeof(triangle1_vertices), triangle1_vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(rectangle_vertices), rectangle_vertices, GL_STATIC_DRAW);
+
+  // EBO: store the indices in memory
+  unsigned int EBO;
+  glGenBuffers(1, &EBO);
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(rectangle_vertices_indices), rectangle_vertices_indices, GL_STATIC_DRAW);
 
   // Now we have to have to tell OpenGL how to interpret the raw data
   glVertexAttribPointer(
@@ -185,10 +200,13 @@ int main() {
 
     glUseProgram(shader_program);
     glBindVertexArray(VAO);
-    glDrawArrays(
+    // We have a EBO instead of a VBO as a buffer target
+    // so we replace glDrawArray by:
+    glDrawElements(
       GL_TRIANGLES,  // we want to draw triangles
-      0,  // starting index of the vertex array we want to draw (?)
-      3 // we want to draw 3 vertices
+      6,  // we want 6 vertices in total
+      GL_UNSIGNED_INT, // type of the indices
+      0 // EBO offset, or pass in index array if we do not use EBO
     );
 
     glfwSwapBuffers(window);
