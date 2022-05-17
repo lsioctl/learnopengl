@@ -28,6 +28,19 @@ void checkCompilationStatus(int vertex_shader_id)
   }
 }
 
+void checkLinkingStatus(int shader_program_id)
+{
+  int  success;
+  char info_log[512];
+  glGetProgramiv(shader_program_id, GL_LINK_STATUS, &success);
+
+  if(!success)
+  {
+    glGetProgramInfoLog(shader_program_id, 512, NULL, info_log);
+    std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << info_log << std::endl;
+  }
+}
+
 int main() {
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -67,6 +80,16 @@ int main() {
      0.0f,  0.5f, 0.0f
   };
 
+  // Vertex Array Object
+  // It will allow to store VBO and Vertex Attribute that
+  // we will consequently declare
+  // in Core OpenGL, VAO are mandatory
+  unsigned int VAO;
+  glGenVertexArrays(1, &VAO);
+  // once we bind it, all subsequent VBO and attributes
+  // will be store on the VAO referenced by this id
+  glBindVertexArray(VAO);
+
   // Vertex Buffer Object
   // will set up a memory on the graphic card
   // VBO will store its buffer id
@@ -82,6 +105,19 @@ int main() {
   // another example is GL_DYNAMIC_DRAW, which means thata data can change a lot
   // so it should be stored in a memory region where write (and read for usage) is fast
   glBufferData(GL_ARRAY_BUFFER, sizeof(triangle1_vertices), triangle1_vertices, GL_STATIC_DRAW);
+
+  // Now we have to have to tell OpenGL how to interpret the raw data
+  glVertexAttribPointer(
+    0, // location of the vertex attribute, will be used in vertex shader with layout (location = 0)
+    3, // vertex attribue is a vec3, 3 elements
+    GL_FLOAT, // element of the vec3 is float
+    GL_FALSE, // don't normalize data
+    3 * sizeof(float), // size of a stride is 3 float elements
+    (void*)0 // offset is 0
+  );
+
+  // vertex attributes are disabled by default, so enable the one we created
+  glEnableVertexAttribArray(0);
 
   // "Modern" OpenGL wants us to define 2 shaders: vertex and fragments
   // vertex shader is the first one in the pipeline
@@ -108,7 +144,7 @@ int main() {
     "out vec4 frag_color;\n"
     "void main()\n"
     "{\n"
-    "frag_color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "  frag_color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
     "} \0";
 
   unsigned int fragment_shader;
@@ -118,6 +154,24 @@ int main() {
 
   checkCompilationStatus(fragment_shader);
 
+
+  // Create the shader programm by linking the two shaders
+  unsigned int shader_program;
+  shader_program = glCreateProgram();
+  glAttachShader(shader_program, vertex_shader);
+  glAttachShader(shader_program, fragment_shader);
+  glLinkProgram(shader_program);
+
+  checkLinkingStatus(shader_program);
+
+  // Clean the shader objects, they are not in use anymore
+  glDeleteShader(vertex_shader);
+  glDeleteShader(fragment_shader);
+
+  // Activate this programm for each render and shader call
+  glUseProgram(shader_program);
+
+  
   // Render loop
   while(!glfwWindowShouldClose(window))
   {
@@ -128,6 +182,10 @@ int main() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     // state-using function
     glClear(GL_COLOR_BUFFER_BIT);
+
+    glUseProgram(shader_program);
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
     glfwSwapBuffers(window);
     glfwPollEvents();    
