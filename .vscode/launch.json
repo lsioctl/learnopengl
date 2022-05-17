@@ -18,6 +18,17 @@
           "name": "LD_LIBRARY_PATH",
           // quite ugly but gdb does not get ~
           "value": "${LD_LIBRARY_PATH}:../glfw-3.3.7/install/lib"
+        },
+        // Warning: comment out if you don't need that
+        // To offload to Nvidia GPU for users like me with PRIME
+        // profile 'on demand'
+        {
+          "name": "__NV_PRIME_RENDER_OFFLOAD",
+          "value": "1"
+        },
+        {
+          "name": "__GLX_VENDOR_LIBRARY_NAME",
+          "value": "nvidia"
         }
       ],
       "externalConsole": false,
