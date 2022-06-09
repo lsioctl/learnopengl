@@ -6,7 +6,7 @@
 #include "glad/glad.h"
 //#include "GLFW/glfw3.h"
 
-#include "ShaderProgram.h"
+#include "ShaderProgram.hpp"
 
 void ShaderProgram::checkCompilationStatus_(int vertex_shader_id)
 {
@@ -58,19 +58,27 @@ void ShaderProgram::readFromFile_(const char* file_path, std::string& dest_strin
   }
 }
 
+GLuint ShaderProgram::compile_(const std::string& shader_source, GLenum gl_shader_type)
+{
+  const char *shader_source_c{shader_source.c_str()};
+
+  // create a shader object and get its id
+  GLuint shader_id{glCreateShader(gl_shader_type)};
+  // attach and compile
+  glShaderSource(shader_id, 1, &shader_source_c, NULL);
+  glCompileShader(shader_id);
+
+  return shader_id;
+}
+
 ShaderProgram::ShaderProgram(const char* vertex_path, const char* fragment_path)
 {
   // "Modern" OpenGL wants us to define 2 shaders: vertex and fragments
   // vertex shader is the first one in the pipeline
   std::string temp_vertex_source;
   readFromFile_(vertex_path, temp_vertex_source);
-  const char *vertex_shader_source{temp_vertex_source.c_str()};
 
-  // create a shader object and get its id
-  vertex_shader_id_ = glCreateShader(GL_VERTEX_SHADER);
-  // attach and compile
-  glShaderSource(vertex_shader_id_, 1, &vertex_shader_source, NULL);
-  glCompileShader(vertex_shader_id_);
+  vertex_shader_id_ = compile_(temp_vertex_source, GL_VERTEX_SHADER);
 
   checkCompilationStatus_(vertex_shader_id_);
 
@@ -81,11 +89,8 @@ ShaderProgram::ShaderProgram(const char* vertex_path, const char* fragment_path)
   // by each shader of the program
   std::string temp_fragment_source;
   readFromFile_(fragment_path, temp_fragment_source);
-  const char *fragment_shader_source{temp_fragment_source.c_str()};
 
-  fragment_shader_id_ = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragment_shader_id_, 1, &fragment_shader_source, NULL);
-  glCompileShader(fragment_shader_id_);
+  fragment_shader_id_ = compile_(temp_fragment_source, GL_FRAGMENT_SHADER);
 
   checkCompilationStatus_(fragment_shader_id_);
 
