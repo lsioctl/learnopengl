@@ -177,7 +177,7 @@ int main() {
   printNVertexAttribute();
 
   // TODO: harcoded relative path
-  auto main_shader{ShaderProgram{"./shaders/texture1_vtx.glsl", "./shaders/texture1_frag.glsl"}};
+  auto main_shader{ShaderProgram{"./shaders/texture2_vtx.glsl", "./shaders/texture2_frag.glsl"}};
   auto main_shader_id{main_shader.id};
 
   // Render loop
