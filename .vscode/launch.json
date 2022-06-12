@@ -16,7 +16,7 @@
       "environment": [
         {
           "name": "LD_LIBRARY_PATH",
-          // quite ugly but gdb does not get ~
+          // quite ugly but gdb does not expand the ~
           "value": "${LD_LIBRARY_PATH}:../glfw-3.3.7/install/lib"
         },
         // Warning: comment out if you don't need that

@@ -8,6 +8,7 @@
         "-fdiagnostics-color=always",
         "-g",
         "${fileDirname}/thirdparties/glad.c",
+        "${fileDirname}/thirdparties/stb_image.cpp",
         "${fileDirname}/ShaderProgram.cpp",
         "${file}",
         "-I",
