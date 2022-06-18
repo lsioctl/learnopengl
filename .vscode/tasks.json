@@ -10,6 +10,7 @@
         "${fileDirname}/thirdparties/glad.c",
         "${fileDirname}/thirdparties/stb_image.cpp",
         "${fileDirname}/ShaderProgram.cpp",
+        "${fileDirname}/Texture.cpp",
         "${file}",
         "-I",
         "~/dev/glfw-3.3.7/install/include",
