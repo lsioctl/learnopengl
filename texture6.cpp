@@ -99,6 +99,8 @@ int main() {
   glUniform1i(glGetUniformLocation(main_shader_id, "our_texture"), 0); // set it manually
   main_shader.setUniformInt("our_texture2", 1); // or with shader class
 
+  vao.bind();
+
   // Render loop
   while(!glfwWindowShouldClose(window))
   {
@@ -111,7 +113,6 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     // render the rectangle
-    vao.bind();
     // We have a EBO instead of a VBO as a buffer target
     // so we replace glDrawArray by:
     glDrawElements(

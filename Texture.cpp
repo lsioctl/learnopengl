@@ -58,11 +58,15 @@ Texture::Texture(const char* image_source, GLuint image_format)
   // free the image data as it is not used anymore
   stbi_image_free(data);
   
-  // unbind the texture with binding the default texture (0)
-  glBindTexture(GL_TEXTURE_2D, 0);
+  unbind();
 }
 
 void Texture::bind()
 {
   glBindTexture(GL_TEXTURE_2D, id);
+}
+
+void Texture::unbind() {
+  // unbind the texture with binding the default texture (0)
+  glBindTexture(GL_TEXTURE_2D, 0);
 }
