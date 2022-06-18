@@ -11,6 +11,7 @@
         "${fileDirname}/thirdparties/stb_image.cpp",
         "${fileDirname}/ShaderProgram.cpp",
         "${fileDirname}/Texture.cpp",
+        "${fileDirname}/VAO.cpp",
         "${file}",
         "-I",
         "~/dev/glfw-3.3.7/install/include",
