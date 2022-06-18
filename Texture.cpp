@@ -4,7 +4,7 @@
 
 #include "Texture.hpp"
 
-Texture::Texture(const char* image_source)
+Texture::Texture(const char* image_source, GLuint image_format)
 {
   // OpenGL y axis starts on the bottom and most images start on the top
   // this tells stbi to flip y-axis for us
@@ -39,11 +39,11 @@ Texture::Texture(const char* image_source)
     glTexImage2D(
       GL_TEXTURE_2D,  // texture target, generated texture will only affect textures bound to this target
       0,  // mipmap level we want this texture to be generated, we leave the default
-      GL_RGB,  // storage format of the resulting texture in OpenGL
+      image_format,  // storage format of the resulting texture in OpenGL
       width,  // of the restulting texture
       height, // of the resulting texture
       0,  // legacy stuff, should always be 0
-      GL_RGB,  // format of the source image
+      image_format,  // format of the source image
       GL_UNSIGNED_BYTE,  // format of the source image
       data // actual source image data
     );

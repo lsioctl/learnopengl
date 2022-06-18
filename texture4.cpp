@@ -52,7 +52,7 @@ int main() {
   }
 
   // TODO: hardcoded path
-  auto texture{Texture{"./textures/container.jpg"}};
+  auto texture{Texture{"./textures/container.jpg", GL_RGB}};
 
   // First two parametres set the location of the lower left corner
   // of the window.
