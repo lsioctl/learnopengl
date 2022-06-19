@@ -17,6 +17,8 @@
         "~/dev/glfw-3.3.7/install/include",
         "-I",
         "${fileDirname}/thirdparties/",
+        "-I",
+        "${fileDirname}/thirdparties/glm-0.9.9.8/",
         "-L",
         "~/dev/glfw-3.3.7/install/lib",
         "-lglfw",
