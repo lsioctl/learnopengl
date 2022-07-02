@@ -153,7 +153,7 @@ int main() {
 
   // Create all the vectors that form the view/camera space
   // this process seems to be called Gram-Schmidt process in linear algebra
-  glm::vec3 camera_pos{glm::vec3(0.0f, 0.0f, 3.0f)};  
+  glm::vec3 camera_pos{glm::vec3(0.0f, 2.0f, 3.0f)};  
   glm::vec3 camera_target{glm::vec3(0.0f, 0.0f, 0.0f)};
   glm::vec3 camera_opposite_direction{glm::normalize(camera_pos - camera_target)};
   glm::vec3 up{glm::vec3(0.0f, 1.0f, 0.0f)}; 
