@@ -210,7 +210,12 @@ int main() {
       // always start with identity
       glm::mat4 model_matrix{glm::mat4(1.0f)};
       model_matrix = glm::translate(model_matrix, cube_position_list[i]);
-      float angle{20.0f * i}; 
+      float angle{};
+      if ( i % 3 == 0) {
+        angle = (float)glfwGetTime();
+      } else {
+        angle = 20.0f * i;
+      }
       model_matrix = glm::rotate(model_matrix, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
      
       // set the model in the shader
