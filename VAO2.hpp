@@ -7,7 +7,7 @@
 /**
  * VAO2 created to avoid breaking existing API and changes are:
  * - no EBO
- * - the vertices array does only include vertices and textures (so strid of 5)
+ * - the vertices array does only include vertices and textures (so stride of 5)
  * 
  * TODO: find a better OOD, I will wait until other examples
  */
