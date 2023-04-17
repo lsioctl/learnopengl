@@ -13,6 +13,7 @@
         "${fileDirname}/Texture.cpp",
         "${fileDirname}/VAO.cpp",
         "${fileDirname}/VAO2.cpp",
+        "${fileDirname}/Camera.cpp",
         "${file}",
         "-I",
         "~/dev/glfw-3.3.7/install/include",
