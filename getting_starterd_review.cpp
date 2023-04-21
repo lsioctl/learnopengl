@@ -11,7 +11,7 @@
 #include "ShaderProgram.hpp"
 #include "Texture.hpp"
 #include "Camera.hpp"
-#include "CubeWoodSmileMesh.h"
+#include "CubeWoodSmileMesh.hpp"
 
 // Global variables
 // delta_time
@@ -121,17 +121,8 @@ int main() {
 
     std::size_t Ncube{cube_position_list.size()};
 
-    std::vector<CubeWoodSmileMesh> cube_list;
-    cube_list.reserve(Ncube);
-
-    // Create the cube meshes
-    for (std::size_t i = 0; i < Ncube; i++) {
-        // emplace back with temporary object is identical to push_back
-        // so we use explicitely push_back
-        // see: https://andreasfertig.blog/2023/04/push_back-vs-emplace_back-when-to-use-what/
-        cube_list.push_back(CubeWoodSmileMesh{});
-    }
-
+    CubeWoodSmileMesh cube_mesh{};
+    
     // TODO: harcoded relative path
     auto main_shader{ShaderProgram{"./shaders/world_coo1_vtx.glsl", "./shaders/world_coo1_frag.glsl"}};
     auto main_shader_id{main_shader.id};
@@ -153,7 +144,9 @@ int main() {
     const std::string view_matrix_uniform_name{"view_matrix"};
 
     // The projection matrix value does not change per frame, so we can set its value here
-    //glUniformMatrix4fv(projection_loc, 1, GL_FALSE, glm::value_ptr(projection_matrix));
+    main_shader.use();
+    // TODO: we need to call use before .set* maybe change this pattern and include
+    // use in the .set* ?
     main_shader.setMat4("projection_matrix", projection_matrix);
 
     // Render loop
@@ -181,8 +174,6 @@ int main() {
         // send the view_matrix to the shader with the camera position updated
         main_shader.setMat4(view_matrix_uniform_name, view_matrix);
 
-        
-
         for (std::size_t i = 0; i < Ncube; i++) {
             // Model matrix
             // Used to transform local (object coordinates) to world coordinates
@@ -196,11 +187,8 @@ int main() {
             main_shader.setMat4(model_matrix_uniform_name, model_matrix);
 
             // draw the curent cube
-            auto& current_cube = cube_list[i];
-
-            current_cube.draw(main_shader);
+            cube_mesh.draw(main_shader);
         }
-
 
         // swap buffer and poll IO events
         glfwSwapBuffers(window);

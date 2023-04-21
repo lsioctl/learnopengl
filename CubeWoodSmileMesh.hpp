@@ -12,8 +12,6 @@ class CubeWoodSmileMesh
 private:
     std::size_t Nvertices_;
     std::vector<Texture> texture_list_;
-    // static to avoid creating duplicate shaders and textures
-    inline static bool instance_exists_;
     GLuint VAO_id_;
 public:
     CubeWoodSmileMesh();
