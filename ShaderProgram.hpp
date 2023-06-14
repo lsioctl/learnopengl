@@ -22,5 +22,6 @@ public:
   void setUniformBool(const std::string &uniform_name, bool uniform_value);
   void setUniformInt(const std::string &uniform_name, int uniform_value);
   void setUniformFloat(const std::string &uniform_name, float uniform_value);
-  void setMat4(const std::string &uniform_name, const glm::mat4& mat4);
+  void setMat4(const std::string &uniform_name, const glm::mat4& mat);
+  void setVec3(const std::string &uniform_name, const glm::vec3& vec);
 };
