@@ -111,7 +111,7 @@ int main() {
 
     // vertices in normalized device coordinates (visible region of OpenGL)
     // We don't use EBO here, because of the texture coordinates (see world_coo2 result in this case)
-    std::vector<float> vertices{
+    std::vector<float> cube_vertices{
         // positions          // texture coords
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -156,9 +156,10 @@ int main() {
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
 
-    auto Nvertices{vertices.size()};
+    const auto N_cube_vertices{cube_vertices.size() / 5};
+    std::cout << N_cube_vertices << std::endl;
 
-    auto vao{VAO2{vertices}};
+    auto vao{VAO2{cube_vertices}};
 
     std::vector<glm::vec3> cube_position_list{
         glm::vec3( 0.0f,  0.0f,  0.0f), 
@@ -264,7 +265,7 @@ int main() {
         glDrawArrays(
             GL_TRIANGLES,  // we want to draw triangles
             0,
-            Nvertices  // we want this number of vertices in total
+            N_cube_vertices  // we want this number of vertices in total
         );
 
         lighting_source_shader.use();
@@ -274,7 +275,7 @@ int main() {
         glDrawArrays(
             GL_TRIANGLES,  // we want to draw triangles
             0,
-            Nvertices  // we want this number of vertices in total
+            N_cube_vertices  // we want this number of vertices in total
         );
 
         // swap buffer and poll IO events
