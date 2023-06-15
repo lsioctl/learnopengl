@@ -157,9 +157,12 @@ int main() {
     };
 
     const auto N_cube_vertices{cube_vertices.size() / 5};
-    std::cout << N_cube_vertices << std::endl;
+    const auto N_light_source_vertices{cube_vertices.size() / 5};
 
-    auto vao{VAO2{cube_vertices}};
+    auto cube_vao{VAO2{cube_vertices}};
+    // We prepare another VAO has the light source will be always the same
+    // but the cube will be enhanced (textures, ...)
+    auto light_source_vao{VAO2{cube_vertices}};
 
     std::vector<glm::vec3> cube_position_list{
         glm::vec3( 0.0f,  0.0f,  0.0f), 
@@ -173,8 +176,6 @@ int main() {
         glm::vec3( 1.5f,  0.2f, -1.5f), 
         glm::vec3(-1.3f,  1.0f, -1.5f)
     };
-
-    vao.bind();
 
     // TODO: harcoded relative path
     auto lighting_cube_shader{ShaderProgram{"./shaders/lighting_cube_1_vtx.glsl", "./shaders/lighting_cube_1_frag.glsl"}};
@@ -262,6 +263,7 @@ int main() {
         lighting_cube_shader.setMat4(model_matrix_uniform_name, cube_model_matrix);
 
         // render the cube
+        cube_vao.bind();
         glDrawArrays(
             GL_TRIANGLES,  // we want to draw triangles
             0,
@@ -271,11 +273,12 @@ int main() {
         lighting_source_shader.use();
         lighting_source_shader.setMat4(model_matrix_uniform_name, light_source_model_matrix);
 
-        // render the cube
+        // render the light source
+        light_source_vao.bind();
         glDrawArrays(
             GL_TRIANGLES,  // we want to draw triangles
             0,
-            N_cube_vertices  // we want this number of vertices in total
+            N_light_source_vertices  // we want this number of vertices in total
         );
 
         // swap buffer and poll IO events
