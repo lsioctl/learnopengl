@@ -196,8 +196,10 @@ int main() {
     lighting_cube_shader.use();
 
     // Now shader is in use, we can set the uniforms
-    glm::vec3 cube_color(25.0f, 25.0f, 25.0f);
+    glm::vec3 cube_color(1.0f, 0.5f, 0.31f);
+    glm::vec3 light_color(0.5f, 0.25f, 0.0f);
     lighting_cube_shader.setVec3("color", cube_color);
+    lighting_cube_shader.setVec3("light_color", light_color);
 
     const std::string model_matrix_uniform_name{"model_matrix"};
     const std::string view_matrix_uniform_name{"view_matrix"};
@@ -236,7 +238,7 @@ int main() {
         // Used to transform local (object coordinates) to world coordinates
         // always start with identity
         glm::mat4 model_matrix{glm::mat4(1.0f)};
-        auto cube_position = glm::vec3( 0.0f,  0.0f,  0.0f);
+        auto cube_position = glm::vec3(0.0f,  0.0f,  0.0f);
         model_matrix = glm::translate(model_matrix, cube_position);
 
         // set the model in the shader

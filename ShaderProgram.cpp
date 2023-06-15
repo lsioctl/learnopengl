@@ -17,7 +17,7 @@ void ShaderProgram::checkCompilationStatus_(int vertex_shader_id)
   if (success == false)
   {
     glGetShaderInfoLog(vertex_shader_id, 512, NULL, info_log);
-    std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << info_log << std::endl;
+    std::cout << "ERROR::SHADER::COMPILATION_FAILED\n" << info_log << std::endl;
   }
 }
 
