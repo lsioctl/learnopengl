@@ -179,6 +179,9 @@ int main() {
     auto lighting_cube_shader{ShaderProgram{"./shaders/lighting_cube_1_vtx.glsl", "./shaders/lighting_cube_1_frag.glsl"}};
     auto lighting_cube_shader_id{lighting_cube_shader.id};
 
+    auto lighting_source_shader{ShaderProgram{"./shaders/lighting_cube_1_vtx.glsl", "./shaders/lighting_source_1_frag.glsl"}};
+    auto lighting_source_shader_id{lighting_source_shader.id};
+
     // Projection matrix
     // we want a standard perspective
     glm::mat4 projection_matrix{};
@@ -197,7 +200,7 @@ int main() {
 
     // Now shader is in use, we can set the uniforms
     glm::vec3 cube_color(1.0f, 0.5f, 0.31f);
-    glm::vec3 light_color(0.5f, 0.25f, 0.0f);
+    glm::vec3 light_color(1.0f);
     lighting_cube_shader.setVec3("color", cube_color);
     lighting_cube_shader.setVec3("light_color", light_color);
 
@@ -207,6 +210,11 @@ int main() {
     // The projection matrix value does not change per frame, so we can set its value here
     //glUniformMatrix4fv(projection_loc, 1, GL_FALSE, glm::value_ptr(projection_matrix));
     lighting_cube_shader.setMat4("projection_matrix", projection_matrix);
+
+    // activate the light source shader and set the uniforms
+    lighting_source_shader.use();
+    lighting_source_shader.setVec3("light_color", light_color);
+    lighting_source_shader.setMat4("projection_matrix", projection_matrix);
 
     // Render loop
     while(!glfwWindowShouldClose(window))
@@ -230,19 +238,37 @@ int main() {
         // transform from world coordinate to 'camera' coordinates
         auto view_matrix = camera.getUpdatedViewMatrix();
 
-        // send the view_matrix to the shader with the camera position updated
+        // send the view_matrix to the shaders with the camera position updated
+        lighting_cube_shader.use();
         lighting_cube_shader.setMat4(view_matrix_uniform_name, view_matrix);
+        lighting_source_shader.use();
+        lighting_source_shader.setMat4(view_matrix_uniform_name, view_matrix);
 
-        
         // Model matrix
         // Used to transform local (object coordinates) to world coordinates
         // always start with identity
-        glm::mat4 model_matrix{glm::mat4(1.0f)};
-        auto cube_position = glm::vec3(0.0f,  0.0f,  0.0f);
-        model_matrix = glm::translate(model_matrix, cube_position);
+        glm::mat4 cube_model_matrix{glm::mat4(1.0f)};
+        auto cube_position = glm::vec3(0.0f,  0.0f, 0.0f);
+        cube_model_matrix = glm::translate(cube_model_matrix, cube_position);
 
-        // set the model in the shader
-        lighting_cube_shader.setMat4(model_matrix_uniform_name, model_matrix);
+        glm::mat4 light_source_model_matrix{glm::mat4(1.0f)};
+        auto light_source_position = glm::vec3(0.9f,  0.9f, 0.0f);
+        light_source_model_matrix = glm::translate(light_source_model_matrix, light_source_position);
+        light_source_model_matrix = glm::scale(light_source_model_matrix, glm::vec3(0.2f));
+
+        // set the model in the shaders
+        lighting_cube_shader.use();
+        lighting_cube_shader.setMat4(model_matrix_uniform_name, cube_model_matrix);
+
+        // render the cube
+        glDrawArrays(
+            GL_TRIANGLES,  // we want to draw triangles
+            0,
+            Nvertices  // we want this number of vertices in total
+        );
+
+        lighting_source_shader.use();
+        lighting_source_shader.setMat4(model_matrix_uniform_name, light_source_model_matrix);
 
         // render the cube
         glDrawArrays(
