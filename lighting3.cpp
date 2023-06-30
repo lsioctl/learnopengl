@@ -13,6 +13,8 @@
 #include "Texture.hpp"
 #include "Camera.hpp"
 
+#include <glm/gtx/string_cast.hpp>
+
 // Global variables
 // delta_time
 float delta_time = 0.0f; // Time between current frame and last frame
@@ -321,6 +323,18 @@ int main()
         auto cube_position = glm::vec3(0.0f,  0.0f, 0.0f);
         cube_model_matrix = glm::translate(cube_model_matrix, cube_position);
 
+        // Normal matrix
+        // special matrix for normal vectors
+        // it allow the normal to stay perpendicular
+        // if the model is not scaled in a uniform maner
+        // as inversion is pretty costly, and to avoid to
+        // be computed for every vertex it should not be in
+        // the shaders
+        glm::mat3 cube_normal_matrix = glm::mat3(glm::transpose(glm::inverse(cube_model_matrix)));
+
+        // std::cout << glm::to_string(cube_model_matrix) << std::endl;
+        // std::cout << glm::to_string(cube_normal_matrix) << std::endl;
+
         glm::mat4 light_source_model_matrix{glm::mat4(1.0f)};
         auto light_source_position = glm::vec3(0.9f,  0.9f, 0.0f);
         light_source_model_matrix = glm::translate(light_source_model_matrix, light_source_position);
@@ -329,6 +343,7 @@ int main()
         // set the model in the shaders
         lighting_cube_shader.use();
         lighting_cube_shader.setMat4(model_matrix_uniform_name, cube_model_matrix);
+        lighting_cube_shader.setMat3("normal_matrix", cube_normal_matrix);
         lighting_cube_shader.setVec3("light_pos", light_source_position);
 
         // render the cube
