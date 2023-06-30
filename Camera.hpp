@@ -32,4 +32,5 @@ public:
     void updateOrientation(double mouse_x_pos, double mouse_y_pos);
     // Update the LookAt with position, orientation, ... and return it
     const glm::mat4& getUpdatedViewMatrix();
+    const glm::vec3& getPosition() const;
 };

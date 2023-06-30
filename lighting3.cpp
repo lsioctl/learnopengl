@@ -308,7 +308,12 @@ int main()
 
         // View matrix
         // transform from world coordinate to 'camera' coordinates
-        auto view_matrix = camera.getUpdatedViewMatrix();
+        auto& view_matrix = camera.getUpdatedViewMatrix();
+
+        // We will use the world coordinates for the specular lighting
+        // most of the people use the view coordinates, because the camera
+        // position there is always (0, 0, 0)
+        auto& camera_position = camera.getPosition();
 
         // send the view_matrix to the shaders with the camera position updated
         lighting_cube_shader.use();
@@ -334,6 +339,7 @@ int main()
 
         // std::cout << glm::to_string(cube_model_matrix) << std::endl;
         // std::cout << glm::to_string(cube_normal_matrix) << std::endl;
+        //std::cout << glm::to_string(camera_position) << std::endl;
 
         glm::mat4 light_source_model_matrix{glm::mat4(1.0f)};
         auto light_source_position = glm::vec3(0.9f,  0.9f, 0.0f);
@@ -345,6 +351,8 @@ int main()
         lighting_cube_shader.setMat4(model_matrix_uniform_name, cube_model_matrix);
         lighting_cube_shader.setMat3("normal_matrix", cube_normal_matrix);
         lighting_cube_shader.setVec3("light_pos", light_source_position);
+        lighting_cube_shader.setVec3("camera_pos", camera_position);
+
 
         // render the cube
         glBindVertexArray(cube_vao_id);

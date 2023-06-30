@@ -91,3 +91,7 @@ const glm::mat4& Camera::getUpdatedViewMatrix() {
 
     return view_matrix_;
 }
+
+const glm::vec3& Camera::getPosition() const {
+    return position_;
+}
