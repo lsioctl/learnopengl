@@ -280,8 +280,8 @@ int main() {
     main_shader.use();
 
     // Now shader is in use, we can set the uniforms for the texture units
-    main_shader.setUniformInt("our_texture", 0);
-    main_shader.setUniformInt("our_texture2", 1);
+    main_shader.setInt("our_texture", 0);
+    main_shader.setInt("our_texture2", 1);
 
     const std::string model_matrix_uniform_name{"model_matrix"};
     const std::string view_matrix_uniform_name{"view_matrix"};

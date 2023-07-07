@@ -248,7 +248,7 @@ int main()
     glEnableVertexAttribArray(0);
 
     // TODO: harcoded relative path
-    auto lighting_cube_shader{ShaderProgram{"./shaders/lighting_cube_3_vtx.glsl", "./shaders/lighting_cube_3_frag.glsl"}};
+    auto lighting_cube_shader{ShaderProgram{"./shaders/lighting_cube_3_vtx.glsl", "./shaders/material_1_frag.glsl"}};
     auto lighting_cube_shader_id{lighting_cube_shader.id};
 
     auto lighting_source_shader{ShaderProgram{"./shaders/lighting_cube_1_vtx.glsl", "./shaders/lighting_source_1_frag.glsl"}};
@@ -271,10 +271,16 @@ int main()
     lighting_cube_shader.use();
 
     // Now shader is in use, we can set the uniforms
-    glm::vec3 cube_color(1.0f, 0.5f, 0.31f);
-    glm::vec3 light_color(1.0f);
-    lighting_cube_shader.setVec3("color", cube_color);
-    lighting_cube_shader.setVec3("light_color", light_color);
+    glm::vec3 light_color(1.0f, 1.0f, 1.0f);
+
+    lighting_cube_shader.setVec3("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+    // darken diffuse light a bit
+    lighting_cube_shader.setVec3("light.diffuse", (0.5f * light_color));
+    lighting_cube_shader.setVec3("light.specular", glm::vec3(1.0f, 1.0f, 1.0f)); 
+    lighting_cube_shader.setVec3("material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+    lighting_cube_shader.setVec3("material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+    lighting_cube_shader.setVec3("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+    lighting_cube_shader.setFloat("material.shininess", 32.0f);
 
     const std::string model_matrix_uniform_name{"model_matrix"};
     const std::string view_matrix_uniform_name{"view_matrix"};
@@ -351,7 +357,7 @@ int main()
         lighting_cube_shader.use();
         lighting_cube_shader.setMat4(model_matrix_uniform_name, cube_model_matrix);
         lighting_cube_shader.setMat3("normal_matrix", cube_normal_matrix);
-        lighting_cube_shader.setVec3("light_pos", light_source_position);
+        lighting_cube_shader.setVec3("light.position", light_source_position);
         lighting_cube_shader.setVec3("camera_pos", camera_position);
 
 

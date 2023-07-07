@@ -97,7 +97,7 @@ int main() {
 
   // Now shader is in use, we can set the uniforms for the texture units
   glUniform1i(glGetUniformLocation(main_shader_id, "our_texture"), 0); // set it manually
-  main_shader.setUniformInt("our_texture2", 1); // or with shader class
+  main_shader.setInt("our_texture2", 1); // or with shader class
 
   vao.bind();
 

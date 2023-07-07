@@ -16,5 +16,6 @@ void main()
   // we read the multiplication from right to left
   gl_Position = projection_matrix * view_matrix * model_matrix * vec4(a_pos, 1.0);
   normal = normal_matrix * a_norm;
+  // we use the world coordinates for all the lightning calculations
   frag_pos = vec3(model_matrix * vec4(a_pos, 1.0));
 };

@@ -128,8 +128,8 @@ void CubeWoodSmileMesh::draw(ShaderProgram& shader_program) {
     shader_program.use();
 
     // Now shader is in use, we can set the uniforms for the texture units
-    shader_program.setUniformInt("our_texture", 0);
-    shader_program.setUniformInt("our_texture2", 1);
+    shader_program.setInt("our_texture", 0);
+    shader_program.setInt("our_texture2", 1);
 
     // render the cube
     glDrawArrays(
