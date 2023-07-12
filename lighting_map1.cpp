@@ -88,8 +88,7 @@ int main()
         return -1;
     }
 
-    auto diffuse_map{Texture{"./textures/container.jpg", GL_RGB}};
-    //auto texture_face{Texture{"./textures/awesomeface.png", GL_RGBA}};
+    auto diffuse_map{Texture{"./textures/container2.png", GL_RGBA}};
 
     // First two parametres set the location of the lower left corner
     // of the window.
